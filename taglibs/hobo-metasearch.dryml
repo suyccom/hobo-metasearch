@@ -1,0 +1,224 @@
+<!-- Filters! -->
+
+<!-- Remove hidden-fields from table-plus search in order to avoid datepicker conflicts -->
+<extend tag="table-plus">
+  <old-table-plus merge>
+    <header: replace>
+      <% @filters = attributes[:filters].split(",").each {|t| t.strip! } if attributes && attributes[:filters] %>
+    
+    <!-- Comienzo búsqueda normal -->
+    <div id="busqueda-normal" class="header" style="">
+      <% display = 'block' %>
+      <% display = 'none' if params[:search] && params[:search].size > 1 %>
+      <div class="search" style="display:#{display}">
+        <form param="search-form" method="get" action="" style="float:left;">
+          <span><t key="hobo.table_plus.search">Search</t></span>
+          <% 
+            # El modelo actual: this.klass
+            # El campo seleccionado como nombre: this.klass.name_attribute
+            search_field = this.klass.name_attribute.to_s + '_contains'
+          %>
+          <% value = '' 
+          value = params[:search][search_field.to_sym] if params[:search] %>
+          <input class="search" type="search" name="search[#{search_field}]" value="&value"/>
+          <submit label="&t('hobo.table_plus.submit_label', :default=>'Go')" class="search-button" param="search-submit"/>
+          <input type="submit" class="button" value="Búsqueda avanzada" onclick="new Effect.BlindDown('busqueda-avanzada');$('busqueda-normal').hide(); return false;" />
+        </form>
+        
+       <!-- Button to enable advanced search with Ajax (deprecated) -->
+<!--       <form style="float:right; margin-left:10px;" with="&Event.new" action="/events/index" update="div-busqueda" success="$('busqueda-normal').hide();">-->
+<!--         <input type="hidden" name="advanced" value="true"/>-->
+<!--         <input type="hidden" name="filters" value="&attributes[:filters]" />-->
+<!--         <submit class="button" label="Búsqueda avanzada" />-->
+<!--       </form>-->
+        
+      </div>
+    </div>
+    <!-- Fin busqueda normal -->
+    
+    
+    
+    <!-- Comienzo busqueda avanzada -->
+    
+    
+
+      <div>
+      <% display = 'none' %>
+      <% display = 'block' if params[:search] && params[:search].size > 1%>
+      <div id="busqueda-avanzada" style="display:#{display};">
+        <div class='header'>
+          <a style="color: #0044CC;" to="&this.klass">
+            Cerrar búsqueda avanzada
+          </a>
+        </div>
+        
+                
+ 
+        
+        <form with="&this.klass.new" method="get" style="padding:20px; background-color:#F0FFBB;">
+        <fieldset class="feckless-fields horizontal filters">
+        
+        
+        <!-- Print standard filters -->
+        <!-- Custom filter list comes from two possible places, 
+             First Ajax load comes from params
+             Next loads comes from attrs -->
+        <%  
+        if !@filters
+          columns = this.class.content_columns.*.name
+          columns -= %w{created_at updated_at created_on updated_on deleted_at key_timestamp}
+          assocs = this.class.reflections.values.reject {|r| r.macro == :has_many }.map &its.name.to_s
+          @filters = columns + assocs
+        end
+        
+        for filter in @filters %>
+          <super-filter with="&filter" clase="&this.class.attr_type(filter)" model="&this.class"/>
+        <% end %>
+          
+          <div class="submit">
+            <submit style="clear:both; margin-left:350px;" label="Buscar"/>
+          </div>
+        </fieldset>
+        </form>
+        </div>
+        <!-- Fin busqueda avanzada -->
+        </div>
+        
+        
+        
+        
+        <!-- Result counter -->
+        <p style="text-align:right;"><%= this.total_entries %> resultados. Página <%= this.current_page %> de <%= this.total_pages %></p>
+    </header:>
+    
+    
+    <!-- Sorting -->
+    <field-heading-row:>
+    <% sort_field ||= @sort_field; sort_direction ||= @sort_direction; sort_columns ||= {} %>
+    <% sort_columns['this'] ||= this.member_class.try.name_attribute %>
+      <with-field-names merge-attrs="&all_attributes & attrs_for(:with_fields)">
+        <% col = sort_columns[scope.field_path] || scope.field_path
+           sort = sort_field == col && sort_direction == 'asc' ?
+                    "-#{col}" : col
+           sort_url = url_for_page_path(params.merge(:sort => sort) - [:page])
+           col_heading_name = this.member_class.try.human_attribute_name(scope.field_name, :default=> scope.field_name.titleize) %>
+
+        <th param="#{scope.field_name}-heading">
+
+
+<%
+assocs = this.member_class.reflections.values.reject {|r| r.macro == :has_many }.map &its.name.to_s
+sort_field = col
+#FIXME name_attribute can be different, it doesn't have to be 'name'
+sort_field += '_name' if assocs.include? col
+%>
+
+<%= sort_link @search, :"#{sort_field}", col_heading_name, :default_order => :asc %>
+
+        </th>
+      </with-field-names>
+      <th if="&all_parameters[:controls]" class="controls"></th>
+    </field-heading-row>
+    
+    
+    
+  </old-table-plus>
+</extend>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<def tag="super-filter" attrs="clase, model">
+
+  <div class="field">
+    <label><t key="activerecord.attributes.#{model.to_s.downcase}.#{this.to_s}"><%= this.to_s %></t></label>
+    
+       <% #logger.info 'patata clase.to_s: ' + clase.to_s 
+       %>
+    
+    <% case clase.to_s
+    
+    when /EnumString/ %>
+      <hjq-combobox adjustWidth="&false">
+        <% if params[:search]
+             selected = clase.values.detect {|o| o.to_s==params[:search][:"#{this.to_s}_equals"] } 
+           else
+             selected = ''
+           end %>
+        <select-menu first-option="" first-value="" 
+        name="search[#{this.to_s}_equals]" selected="&selected"
+        options="&clase.values.map{|value| 
+          translation = clase.to_s.tableize + '.' + value.to_s.downcase
+          [translate(translation, :default => value.to_s), value]}" />
+      </hjq-combobox>
+      
+
+
+
+    
+   <% when /String|Text/ %>
+      <% value = '' %>
+      <% value = params[:search][:"#{this}_contains"] if params[:search] %>
+      <input type="text" name="search[#{this}_contains]" value="&value"/>
+      
+    <% when /Date/ %>
+      <% value = '' %>
+      <% value = params[:search][:"#{this}_gte"] if params[:search] %>
+      de <fechapicker name="search[#{this}_gte]" value="&value"/>
+      <% value = params[:search][:"#{this}_lte"] if params[:search] %>
+      a <fechapicker name="search[#{this}_lte]" value="&value"/>
+      
+    <% when /Boolean/ %>
+      <% options = [
+        ["not #{this.to_s}",'f'],
+        [this.to_s,'t']
+      ] %>
+      <% selected = ''
+      selected =params[:search][:"#{this.to_s}_equals"] if params[:search]%>
+      <hjq-combobox adjustWidth="&false">
+        <select-menu first-option="" first-value="" name="search[#{this.to_s}_equals]"
+                    options="&options" selected="&selected"/>
+      </hjq-combobox>
+    
+    <% when /Lifecycle/ %>
+      <hjq-combobox adjustWidth="&false">
+        <% if params[:search]
+             selected = model::Lifecycle.states.keys.detect {|o| o.to_s==params[:search][:"#{this.to_s}_equals"] } 
+           else
+             selected = ''
+           end %>
+        
+        <select-menu first-option="" first-value="" 
+        name="search[#{this.to_s}_equals]" selected="&selected"
+        options="&model::Lifecycle.states.keys.map{|state| 
+          translation = 'activerecord.attributes.'+ model.to_s.downcase + '.lifecycle.states.' + state.to_s
+          [translate(translation, :default => state.to_s), state]}" />
+
+      </hjq-combobox>
+      
+    <!-- Any other option should be a belongs_to -->
+    <% else 
+      selected = ''
+      selected = clase.all.detect {|o| o.to_s==params[:search][:"#{this.to_s}_name_equals"] } if params[:search] %>
+      <hjq-combobox adjustWidth="&false">
+        <select-menu first-option="" first-value="" name="search[#{this.to_s}_name_equals]" options="&clase.all" selected="&selected"/>
+      </hjq-combobox>
+    <% end %>    
+    
+  </div>
+</def>
