@@ -1,3 +1,18 @@
+<!-- Use Hobo Jquery for the default date input -->
+<def tag="input" for="Date">
+  <fechapicker merge/>
+</def>
+
+<def tag="fechapicker">
+  <hjq-datepicker dayNamesMin="&['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa']"
+    dateFormat="dd-mm-yy" 
+    firstDay="1" 
+    changeYear="true"
+    monthNames="&['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']"
+    monthNamesShort="&['Ene', 'Feb', 'Mar', 'Abr','May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']" merge/>
+</def>
+
+
 <!-- Filters! -->
 
 <!-- Remove hidden-fields from table-plus search in order to avoid datepicker conflicts -->
