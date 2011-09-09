@@ -15,8 +15,9 @@ Requirements
 
 * Rails 3.0.9 gem
 * Hobo 1.3.0.RC2 gem
-* Metasearch 1.0.6 gem
-* Hobo Jquery plugin/template
+* [Metasearch 1.0.6 gem](https://github.com/ernie/meta_search)
+* [Hobo Jquery plugin or gem](https://github.com/bryanlarsen/hobo-jquery/tree/rails3)
+* [Hobo Contrib plugin](https://github.com/bryanlarsen/hobo-contrib)
 * Hobo Nice Template plugin
 * Git
 
