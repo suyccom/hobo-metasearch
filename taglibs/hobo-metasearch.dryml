@@ -1,5 +1,5 @@
 <def tag="table-plus-with-filters">
-  <table-plus merge-attrs>
+  <table-plus merge-attrs merge-params>
     <!-- Filters -->
     <header: replace>
       <div class="well">
