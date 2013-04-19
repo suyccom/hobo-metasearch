@@ -8,15 +8,14 @@
         <advanced-search-box merge-attrs />
       </div>
     </header:>
-    
+
     <!-- Sorting -->
     <field-heading-row:>
-      <sorting-row merge-attrs/>
+      <sorting-row merge-attrs merge-params/>
     </field-heading-row:>
 
   </table-plus>
 </def>
-
 
 <def tag="mini-search-box">
   <div id="busqueda-normal" class="header" style="">
@@ -38,7 +37,6 @@
     </div>
   </div>
 </def>
-
 
 <def tag="advanced-search-box">
 
@@ -72,7 +70,6 @@
     <!-- Fin busqueda avanzada -->
     </div>
 </def>
-
 
 <def tag="super-filter" attrs="clase, model">
 
@@ -140,16 +137,6 @@
   </div>
 </def>
 
-
-
-
-
-
-
-
-
-
-
 <def tag="sorting-row">
 <% sort_field ||= @sort_field; sort_direction ||= @sort_direction; sort_columns ||= {} %>
     <% sort_columns['this'] ||= this.member_class.try.name_attribute %>
@@ -159,27 +146,18 @@
                     "-#{col}" : col
            sort_url = url_for_page_path(params.merge(:sort => sort) - [:page])
            col_heading_name = this.member_class.try.human_attribute_name(scope.field_name, :default=> scope.field_name.titleize) %>
-
         <th param="#{scope.field_name}-heading">
-
-
-    <%
-    assocs = this.member_class.reflections.values.reject {|r| r.macro == :has_many }.map &its.name.to_s
-    sort_field = col
-    #FIXME name_attribute can be different, it doesn't have to be 'name'
-    sort_field += '_name' if assocs.include? col
-    %>
-
-    <%= sort_link @search, :"#{sort_field}", col_heading_name, :default_order => :asc %>
-
+          <%
+          assocs = this.member_class.reflections.values.reject {|r| r.macro == :has_many }.map &its.name.to_s
+          sort_field = col
+          #FIXME name_attribute can be different, it doesn't have to be 'name'
+          sort_field += '_name' if assocs.include? col
+          %>
+          <%= sort_link @search, :"#{sort_field}", col_heading_name, :default_order => :asc %>
         </th>
       </with-field-names>
       <th if="&all_parameters[:controls]" class="controls"></th>
 </def>
-
-
-
-
 
 <def tag="result-counter">
   <p style="float:right;">
