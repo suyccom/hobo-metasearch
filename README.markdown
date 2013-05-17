@@ -18,7 +18,7 @@ How to use
 
 Add it to your Gemfile:
 
-    gem 'hobo-metasearch', :git => "git://github.com/Hobo/hobo-metasearch"
+    gem 'hobo-metasearch', :git => "git://github.com/suyccom/hobo-metasearch"
 
 
 Run bundle, and go to your application.dryml or front_site.dryml and include the taglibs:
@@ -29,7 +29,7 @@ In your controller you have to redefine index, so it uses the metasearch engine
 
     def index
       @search = Project.search(params[:q])
-      @events = @search.paginate(:page => params[:page])
+      @events = @search.result.paginate(:page => params[:page])
     end
   
 And finally you need to use table-plus-with-filters in your index.dryml:
