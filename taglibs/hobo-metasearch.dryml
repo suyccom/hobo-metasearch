@@ -127,13 +127,13 @@
 
       
     <!-- Any other option should be a belongs_to -->
-    <% else
+    <%
+      else
       selected = ''
-      selected = clase.find(params[:q][:"#{this.to_s}_id_eq"]).id if params[:q] 
-      %>
-        <select-menu first-option="" first-value="" 
-                     name="q[#{this.to_s}_id_eq]" options="&clase.all.map{|o| [o.name, o.id]}" selected="&selected"/>
-    <% end %>    
+      selected = clase.find(params[:q][:"#{this.to_s}_id_eq"]).id if params[:q][:"#{this.to_s}_id_eq"]
+    %>
+      <select-menu first-option="" first-value="" name="q[#{this.to_s}_id_eq]" options="&clase.all.map{|o| [o.name, o.id]}" selected="&selected"/>
+    <% end %>
     </div>
     
   </div>
