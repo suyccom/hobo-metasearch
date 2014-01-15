@@ -130,7 +130,7 @@
     <%
       else
       selected = ''
-      selected = clase.find(params[:q][:"#{this.to_s}_id_eq"]).id if params[:q][:"#{this.to_s}_id_eq"]
+      selected = clase.find(params[:q][:"#{this.to_s}_id_eq"]).id if params[:q] && params[:q][:"#{this.to_s}_id_eq"]
     %>
       <select-menu first-option="" first-value="" name="q[#{this.to_s}_id_eq]" options="&clase.all.map{|o| [o.name, o.id]}" selected="&selected"/>
     <% end %>
