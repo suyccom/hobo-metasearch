@@ -90,7 +90,7 @@
           translation = clase.to_s.tableize + '.' + value.to_s.downcase
           [translate(translation, :default => value.to_s), value]}" />
     
-   <% when /String|Text/ %>
+   <% when /String|Text|HoboFields::Types::EmailAddress/ %>
       <% value = '' %>
       <% value = params[:q][:"#{this}_cont"] if params[:q] %>
       <input type="text" name="q[#{this}_cont]" value="&value"/>
