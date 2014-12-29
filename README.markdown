@@ -27,7 +27,7 @@ How to use
 
 Install it like this:
 
-    rails plugin install git://github.com/suyccom/hobo-metasearch.git
+    rails plugin install git://github.com/suyccom/hobo-metasearch.git -r hobo1.3
 
 
 Go to your application.dryml or front_site.dryml and include the taglibs:
@@ -64,7 +64,7 @@ How to update
 
 Just reinstall:
 
-    rails plugin install --force git://github.com/suyccom/hobo-metasearch.git
+    rails plugin install --force git://github.com/suyccom/hobo-metasearch.git -r hobo1.3
     
 And restart the application :)
 
