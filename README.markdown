@@ -58,6 +58,10 @@ Restart your application and you are good to go! By default it uses all availabl
       </collection>
     </index-page>
 
+Issues with Enum String
+-----------------------
+
+Enum String (enum_string) is a special field provided by Hobo (Hobofields). When you are trying to translate this kind of field [as the official documentation recommends](http://groups.google.com/group/hobousers/browse_thread/thread/484dc97b1e7c80e6), you will probably run into trouble, because of the name of the class you must use. In order to make the pieces of this puzzle run smoothly, you need to use a little convention: call the class name as Yourcustomnameenumstring instead of Yourcustomname. This way hobo-metasearch will do the necessary "magic stuff" :)
 
 How to update
 -------------

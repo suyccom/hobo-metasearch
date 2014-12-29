@@ -168,7 +168,7 @@ sort_field += '_name' if assocs.include? col
     
     <% case clase.to_s
     
-    when /EnumString/ %>
+    when /.*EnumString/i %>
       <hjq-combobox adjustWidth="&false">
         <% if params[:search]
              selected = clase.values.detect {|o| o.to_s==params[:search][:"#{this.to_s}_equals"] } 
