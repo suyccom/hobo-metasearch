@@ -2,9 +2,9 @@
   <table-plus merge-attrs merge-params>
     <!-- Filters -->
     <header: replace>
-      <div class="well">
-        <mini-search-box/>
-        <result-counter/>
+      <div class="well" param="header">
+        <mini-search-box merge-params/>
+        <result-counter merge-params/>
         <advanced-search-box merge-attrs />
       </div>
     </header:>
@@ -32,7 +32,7 @@
         value = params[:q][search_field.to_sym] if params[:q] %>
         <input class="search" type="search" name="q[#{search_field}]" value="&value"/>
         <submit label="&t('hobo.table_plus.search', :default=>'Search')" class="search-button" param="search-submit"/>&nbsp;
-        <input type="submit" class="btn" value="&I18n.t('hobo.metasearch.advanced', :default => 'Advanced search')" onclick="$('#busqueda-avanzada').slideDown(); $('#busqueda-normal').hide(); return false;" />
+        <input type="submit" class="btn" value="&I18n.t('hobo.metasearch.advanced', :default => 'Advanced search')" onclick="$('#busqueda-avanzada').slideDown(); $('#busqueda-normal').hide(); return false;" param="advanced-search-button"/>
       </form>
     </div>
   </div>
@@ -95,12 +95,19 @@
       <% value = params[:q][:"#{this}_cont"] if params[:q] %>
       <input type="text" name="q[#{this}_cont]" value="&value"/>
       
-    <% when /Date/ %>
+    <% when /Date|ActiveSupport::TimeWithZone/ %>
       <% value = '' %>
       <% value = params[:q][:"#{this}_gteq"] if params[:q] %>
       <t key="hobo.metasearch.from">from</t> <bootstrap-datepicker style="width: 80px" name="q[#{this}_gteq]" value="&value"/>
       <% value = params[:q][:"#{this}_lteq"] if params[:q] %>
       <t key="hobo.metasearch.to">to</t> <bootstrap-datepicker style="width: 80px" name="q[#{this}_lteq]" value="&value"/>
+
+    <% when /Integer|Float|Decimal/ %>
+      <% value = '' %>
+      <% value = params[:q][:"#{this}_gteq"] if params[:q] %>
+      <t key="hobo.metasearch.from">from</t> <input type="text" style="width: 80px" name="q[#{this}_gteq]" value="&value"/>
+      <% value = params[:q][:"#{this}_lteq"] if params[:q] %>
+      <t key="hobo.metasearch.to">to</t> <input type="text" style="width: 80px" name="q[#{this}_lteq]" value="&value"/>
       
     <% when /Boolean/ %>
       <% options = [
@@ -162,7 +169,7 @@
 </def>
 
 <def tag="result-counter">
-  <p style="float:right;">
+  <p style="float:right;" param="result-counter">
     <%= this.total_entries %> <t key="hobo.metasearch.results">results</t>. 
     <t key="hobo.metasearch.page">Page</t> <%= this.current_page %> <t key="hobo.metasearch.of">of</t> <%= this.total_pages %>
   </p>
