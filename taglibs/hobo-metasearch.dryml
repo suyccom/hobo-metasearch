@@ -39,7 +39,6 @@
 </def>
 
 <def tag="advanced-search-box">
-
   <div>
     <% display = 'none' %>
     <% display = 'block' if params[:q] && params[:q].size > 1%>
@@ -56,7 +55,8 @@
         @filters = columns + assocs
       end
       
-      for filter in @filters %>
+      for filter in @filters 
+      %>
         <super-filter with="&filter" clase="&this.klass.attr_type(filter)" model="&this.klass"/>
       <% end %>
         
@@ -173,4 +173,5 @@
     <%= this.total_entries %> <t key="hobo.metasearch.results">results</t>. 
     <t key="hobo.metasearch.page">Page</t> <%= this.current_page %> <t key="hobo.metasearch.of">of</t> <%= this.total_pages %>
   </p>
+  <div>&nbsp;</div>
 </def>
