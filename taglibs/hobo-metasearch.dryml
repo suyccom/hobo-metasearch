@@ -41,7 +41,7 @@
 <def tag="advanced-search-box">
   <div>
     <% display = 'none' %>
-    <% display = 'block' if params[:q] && params[:q].size > 1%>
+    <% display = 'block' if params[:q] && params[:q].size > 1 %>
     <div id="busqueda-avanzada" style="display:#{display};">
 
       <form class="form-horizontal" action="&url_for(this.klass)" method="get" style="padding:20px;">
@@ -131,7 +131,6 @@
         options="&model::Lifecycle.states.keys.map{|state| 
           translation = 'activerecord.attributes.'+ model.to_s.downcase + '.lifecycle.states.' + state.to_s
           [translate(translation, :default => state.to_s), state]}" />
-
       
     <!-- Any other option should be a belongs_to -->
     <%
@@ -169,9 +168,10 @@
 </def>
 
 <def tag="result-counter">
-  <p style="float:right;" param="result-counter">
+  <p class='pull-right' param="result-counter">
     <%= this.total_entries %> <t key="hobo.metasearch.results">results</t>. 
     <t key="hobo.metasearch.page">Page</t> <%= this.current_page %> <t key="hobo.metasearch.of">of</t> <%= this.total_pages %>
   </p>
   <div>&nbsp;</div>
 </def>
+
